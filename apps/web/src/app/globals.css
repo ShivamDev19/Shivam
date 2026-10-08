@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   Theme Variables
+   ========================= */
+
+:root,
+[data-theme='light'] {
+  --bg: #f6f4ef;
+  --fg: #16161a;
+  --muted: #6b6b73;
+  --line: #d9d6cc;
+  --accent: #2f4bff;
+}
+
+[data-theme='dark'] {
+  --bg: #0b0b0d;
+  --fg: #f2f1ec;
+  --muted: #8c8c95;
+  --line: #26262b;
+  --accent: #6f86ff;
+}
+
+/* =========================
+   Base
+   ========================= */
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+
+  background: var(--bg);
+  color: var(--fg);
+
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+
+  font-family:
+    'Geist',
+    'Inter',
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+
+  letter-spacing: -0.01em;
+
+  /* Prevent accidental horizontal scrolling */
+  width: 100%;
+}
+
+/* Prevent media from creating overflow */
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+/* Better mobile text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================
+   Accessibility
+   ========================= */
+
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* =========================
+   Selection
+   ========================= */
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* =========================
+   Scrollbar
+   ========================= */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) var(--bg);
+}
+
+/* =========================
+   Animations
+   ========================= */
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================
+   Sections
+   ========================= */
+
+section[id] {
+  scroll-margin-top: 57px;
+}
+
+/* =========================
+   Reduced Motion
+   ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================
+   Small Mobile
+   320px – 374px
+   ========================= */
+
+@media (max-width: 374px) {
+  html {
+    font-size: 15px;
+  }
+
+  section[id] {
+    scroll-margin-top: 52px;
+  }
+}
+
+/* =========================
+   Mobile
+   375px – 767px
+   ========================= */
+
+@media (max-width: 767px) {
+  body {
+    letter-spacing: -0.005em;
+  }
+
+  /*
+   * Prevent long URLs / technical strings
+   * from causing horizontal overflow.
+   */
+  p,
+  a,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: anywhere;
+  }
+
+  /*
+   * Keep form controls inside viewport.
+   */
+  input,
+  textarea,
+  select,
+  button {
+    max-width: 100%;
+  }
+}
+
+/* =========================
+   Tablet
+   768px – 1023px
+   ========================= */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  section[id] {
+    scroll-margin-top: 64px;
+  }
+}
+
+/* =========================
+   Large Screens
+   ========================= */
+
+@media (min-width: 1536px) {
+  body {
+    letter-spacing: -0.012em;
+  }
+}

@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Profile {
+  id           String   @id @default(cuid())
+  name         String
+  title        String
+  shortBio     String
+  longBio      String   @default("")
+  location     String?
+  email        String?
+  phone        String?
+  imageUrl     String?
+  heroText     String?
+  currentFocus String[]
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  shortDescription String
+  description      String
+  category         String
+  projectType      String
+  problem          String?
+  solution         String?
+  features         String[]
+  technologies     String[]
+  githubUrl        String?
+  liveUrl          String?
+  heroImage        String?
+  gallery          String[]
+  architecture     String?
+  challenges       String?
+  learnings        String?
+  featured         Boolean  @default(false)
+  published        Boolean  @default(false)
+  sortOrder        Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([published])
+}
+
+model Skill {
+  id        String  @id @default(cuid())
+  name      String
+  category  String
+  icon      String?
+  sortOrder Int     @default(0)
+  active    Boolean @default(true)
+}
+
+model Experience {
+  id           String    @id @default(cuid())
+  organization String
+  role         String
+  type         String
+  location     String?
+  startDate    DateTime?
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  description  String
+  technologies String[]
+  sortOrder    Int       @default(0)
+  published    Boolean   @default(true)
+}
+
+model Education {
+  id          String    @id @default(cuid())
+  institution String
+  degree      String
+  field       String?
+  startDate   DateTime?
+  endDate     DateTime?
+  grade       String?
+  description String?
+  sortOrder   Int       @default(0)
+}
+
+model Certification {
+  id            String    @id @default(cuid())
+  name          String
+  issuer        String
+  issueDate     DateTime?
+  credentialId  String?
+  credentialUrl String?
+  description   String?
+  published     Boolean   @default(true)
+  sortOrder     Int       @default(0)
+}
+
+model SocialLink {
+  id        String  @id @default(cuid())
+  platform  String
+  url       String
+  label      String?
+  icon      String?
+  active    Boolean @default(true)
+  sortOrder Int     @default(0)
+}
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  status    MessageStatus @default(UNREAD)
+  createdAt DateTime      @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Resume {
+  id         String   @id @default(cuid())
+  fileName   String
+  storageKey String
+  url        String
+  size       Int
+  active     Boolean  @default(true)
+  uploadedAt DateTime @default(now())
+
+  @@index([active])
+}
+
+model SiteSetting {
+  key   String @id
+  value String
+}

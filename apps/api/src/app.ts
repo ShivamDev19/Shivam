@@ -1,0 +1,40 @@
+import 'dotenv/config';
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
+import { auth } from './routes/auth';
+import { contact } from './routes/contact';
+import { certifications, education, experience, profileRoute, projects, skills, socialLinks } from './routes/content';
+import { resume } from './routes/resume';
+import { settings } from './routes/settings';
+import { uploadDir } from './storage';
+import { errorHandler, jsonOnly } from './middleware';
+
+const app = express();
+app.set('trust proxy', 1);
+app.use(helmet());
+app.use(cors({ origin: (process.env.CORS_ORIGIN ?? 'http://localhost:3000').split(','), credentials: true }));
+app.use(express.json({ limit: '100kb' }));
+app.use(cookieParser());
+app.use(jsonOnly);
+app.use(rateLimit({ windowMs: 60_000, limit: 120 }));
+
+app.get('/health', (_req, res) => res.json({ ok: true }));
+app.use('/api/auth', auth);
+app.use('/api/profile', profileRoute);
+app.use('/api/projects', projects);
+app.use('/api/skills', skills);
+app.use('/api/experience', experience);
+app.use('/api/education', education);
+app.use('/api/certifications', certifications);
+app.use('/api/social-links', socialLinks);
+app.use('/api/contact', contact);
+app.use('/api/resume', resume);
+app.use('/api/settings', settings);
+app.use('/files', express.static(uploadDir, { setHeaders: (r) => r.setHeader('Cross-Origin-Resource-Policy', 'cross-origin') }));
+app.use((_req, res) => res.status(404).json({ success: false, error: 'Not found' }));
+app.use(errorHandler);
+
+export default app;

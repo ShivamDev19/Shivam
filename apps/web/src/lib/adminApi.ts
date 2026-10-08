@@ -11,8 +11,6 @@ export type ApiResult<T> = {
   };
 };
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? '').replace(/\/$/, '');
-
 export async function adminFetch<T = unknown>(
   path: string,
   init: {
@@ -21,7 +19,7 @@ export async function adminFetch<T = unknown>(
   } = {}
 ): Promise<ApiResult<T>> {
   try {
-    const r = await fetch(`${API_URL}/api${path}`, {
+    const response = await fetch(`/api${path}`, {
       method: init.method ?? 'GET',
       credentials: 'include',
       headers:
@@ -36,19 +34,22 @@ export async function adminFetch<T = unknown>(
           : undefined,
     });
 
-    if (r.status === 401 && !path.startsWith('/auth/login')) {
+    if (
+      response.status === 401 &&
+      !path.startsWith('/auth/login')
+    ) {
       window.location.href = '/admin/login';
     }
 
-    const j = await r.json().catch(() => ({}));
+    const json = await response.json().catch(() => ({}));
 
     return {
-      ok: r.ok,
-      status: r.status,
-      data: j.data,
-      error: j.error,
-      details: j.details,
-      meta: j.meta,
+      ok: response.ok,
+      status: response.status,
+      data: json.data,
+      error: json.error,
+      details: json.details,
+      meta: json.meta,
     };
   } catch {
     return {

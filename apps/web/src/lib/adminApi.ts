@@ -34,14 +34,14 @@ export async function adminFetch<T = unknown>(
           : undefined,
     });
 
+    const json = await response.json().catch(() => ({}));
+
     if (
       response.status === 401 &&
       !path.startsWith('/auth/login')
     ) {
       window.location.href = '/admin/login';
     }
-
-    const json = await response.json().catch(() => ({}));
 
     return {
       ok: response.ok,
@@ -51,7 +51,9 @@ export async function adminFetch<T = unknown>(
       details: json.details,
       meta: json.meta,
     };
-  } catch {
+  } catch (error) {
+    console.error('Admin API request failed:', error);
+
     return {
       ok: false,
       status: 0,

@@ -15,7 +15,6 @@ const nextConfig = {
     ],
   },
 
-  // Same-origin proxy so the admin session cookie is first-party and visible to middleware.
   async rewrites() {
     return [
       {
